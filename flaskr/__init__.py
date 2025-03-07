@@ -1,4 +1,6 @@
 import os
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from flask import Flask
 
@@ -23,11 +25,17 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits = ["200 per day","50 per hour"]
+    )
+
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-    
+    # @app.route('/hello')
+    # def hello():
+    #     return 'Hello, World!'
+
     from . import db
     db.init_app(app)
 
@@ -35,7 +43,9 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     from . import blog
+    blog.init_app(app, limiter)
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
+
 
     return app
