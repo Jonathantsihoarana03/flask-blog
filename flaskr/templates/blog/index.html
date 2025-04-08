@@ -17,6 +17,7 @@
         </div>
         {% if g.user['id'] == post['author_id'] %}
           <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+          <button class="action" onclick="sendRequest('{{ post['id'] }}')">Action</button>
         {% endif %}
       </header>
       <p class="body">{{ post['body'] }}</p>
@@ -26,3 +27,6 @@
     {% endif %}
   {% endfor %}
 {% endblock %}
+
+
+

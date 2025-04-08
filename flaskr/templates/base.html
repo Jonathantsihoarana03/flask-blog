@@ -1,6 +1,30 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script>
+  // Fonction pour envoyer la requête AJAX
+  async function sendRequest(postId) {
+    try {
+      const response = await fetch(`/post/action`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ post_id: postId }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Action réussie : ${result.message}`);
+      } else {
+        alert("Une erreur s'est produite");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête :", error);
+      alert("Une erreur réseau s'est produite");
+    }
+  }
+</script>
 <nav>
   <h1>Flaskr</h1>
   <ul>
